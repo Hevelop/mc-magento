@@ -146,12 +146,11 @@ class Ebizmarts_MailChimp_Model_Email_Template extends Mage_Core_Model_Email_Tem
         if ($this->isPlain()) {
             $email['text'] = $message;
         } else {
-            if (Mage::helper('core')->isModuleEnabled('AdjustWare_Cartalert')) {
-                if (in_array($this->getTemplateId(), $this->_allowedTemplates))
-                {
-                    $html2plain = new Aitoc_Html2Text($message);
-                    $email['html'] = $html2plain->get_text();
-                }
+            if (Mage::helper('core')->isModuleEnabled('AdjustWare_Cartalert') && in_array($this->getTemplateId(), $this->_allowedTemplates)) {
+                $html2plain = new Aitoc_Html2Text($message);
+                $email['html'] = $html2plain->get_text();
+            } else {
+                $email['html'] = $message;
             }
         }
 
