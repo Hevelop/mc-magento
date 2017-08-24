@@ -14,6 +14,16 @@ class Ebizmarts_MailChimp_Model_Email_Template extends Mage_Core_Model_Email_Tem
 {
     protected $_mail = null;
 
+    protected $_allowedTemplates = array(
+        'catalog_adjcartalert_template',
+        'catalog_adjcartalert_template2',
+        'catalog_adjcartalert_template3',
+        'catalog_adjcartalert_order_template',
+        'catalog_adjcartalert_order_template2',
+        'catalog_adjcartalert_order_template3',
+        'catalog_adjreminder_template'
+    );
+
     /**
      * @param array|string $email
      * @param null $name
@@ -133,10 +143,17 @@ class Ebizmarts_MailChimp_Model_Email_Template extends Mage_Core_Model_Email_Tem
             $email['attachments'] = $att;
         }
 
-        if ($this->isPlain())
+        if ($this->isPlain()) {
             $email['text'] = $message;
-        else
-            $email['html'] = $message;
+        } else {
+            if (Mage::helper('core')->isModuleEnabled('AdjustWare_Cartalert')) {
+                if (in_array($this->getTemplateId(), $this->_allowedTemplates))
+                {
+                    $html2plain = new Aitoc_Html2Text($message);
+                    $email['html'] = $html2plain->get_text();
+                }
+            }
+        }
 
         if ($this->hasQueue() && $this->getQueue() instanceof Mage_Core_Model_Email_Queue) {
             $emailQueue = $this->getQueue();
