@@ -282,6 +282,17 @@ class Ebizmarts_MailChimp_Model_Api_Subscribers
                         case 'store_code':
                             $storeCode = Mage::getModel('core/store')->load($storeId)->getCode();
                             $eventValue = $mergeVars[$key] = $storeCode;
+                            break;
+                        case 'language':
+                            $storeId = $customer->getStoreId();
+                            $language = Mage::getModel('core/store')->load($storeId)->getName();
+                            $eventValue = $mergeVars[$key] = $language != NULL ? $language : 'Italiano';
+                            break;
+                        default:
+                            if ($customer->getData($customAtt)) {
+                                $eventValue = $mergeVars[$key] = $customer->getData($customAtt);
+                            }
+                            break;
                     }
 
                     Mage::dispatchEvent(
