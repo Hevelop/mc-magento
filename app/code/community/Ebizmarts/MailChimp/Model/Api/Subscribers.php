@@ -286,6 +286,16 @@ class Ebizmarts_MailChimp_Model_Api_Subscribers
                                 $eventValue = $mergeVars[$key] = $dop;
                             }
                             break;
+                        case 'language':
+                            $storeId = $customer->getStoreId();
+                            $language = Mage::getModel('core/store')->load($storeId)->getName();
+                            $eventValue = $mergeVars[$key] = $language != NULL ? $language : 'Italiano';
+                            break;
+                        default:
+                            if ($customer->getData($customAtt)) {
+                                $eventValue = $mergeVars[$key] = $customer->getData($customAtt);
+                            }
+                            break;
                     }
 
                     Mage::dispatchEvent(
