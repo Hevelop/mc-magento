@@ -287,7 +287,7 @@ class Ebizmarts_MailChimp_Model_Api_Subscribers
                             }
                             break;
                         case 'language':
-                            $customerStoreId = ($customer->getStoreId() == 0) ? 1 : $customer->getStoreId();
+                            $customerStoreId = $customer->getStoreId();
                             $subscriberStoreId = ($subscriber->getStoreId() == 0) ? 1 : $subscriber->getStoreId();
                             $storeId = (isset($customerStoreId)) ? $customerStoreId : $subscriberStoreId;
                             $language = Mage::getModel('core/store')->load($storeId)->getName();
